@@ -863,6 +863,40 @@ tbody td { padding: 13px 20px; }
 }
 
 /* ══════════════════════════════════════════════
+   ROUTE STAR BUBBLE  (shown after routing questions)
+══════════════════════════════════════════════ */
+.route-star-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 18px !important;
+  min-width: 180px;
+}
+.route-star-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.route-stars {
+  font-size: 26px;
+  line-height: 1;
+  color: #f59e0b;         /* amber – filled stars */
+  letter-spacing: 3px;
+}
+.route-stars-empty {
+  color: rgba(255,255,255,.2);  /* dim empty stars */
+}
+.route-km-est {
+  font-size: 11.5px;
+  color: rgba(255,255,255,.45);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════════
    PRINT
 ══════════════════════════════════════════════ */
 @media print {
