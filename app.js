@@ -457,10 +457,14 @@ function renderReport({ best, containerMeta, aircraft, aircraftIcon, aircraftRan
   const ans = STATE.answers;
   const now = new Date();
 
-  // ── A* path display ─────────────────────────────────────────
-  const pathDisplay = astarResult.path
-    .map(code => `<span class="ap-node">${code}<span class="ap-city">${AIRPORTS[code].city}</span></span>`)
-    .join('<span class="ap-arrow">→</span>');
+  // ── A* path display — uses ap-node / ap-start / ap-end CSS classes ──
+  const pathDisplay = astarResult.path.map((code, i) => {
+    const isFirst = i === 0;
+    const isLast  = i === astarResult.path.length - 1;
+    const cls     = isFirst ? 'ap-node ap-start' : isLast ? 'ap-node ap-end' : 'ap-node';
+    const arrow   = i < astarResult.path.length - 1 ? '<span class="ap-arrow">→</span>' : '';
+    return `<span class="${cls}">${code}<span class="ap-city">${AIRPORTS[code].city}</span></span>${arrow}`;
+  }).join('');
 
   // ── A* exploration steps table ────────────────────────────
   const stepsRows = astarResult.steps.map(st => `
@@ -483,7 +487,13 @@ function renderReport({ best, containerMeta, aircraft, aircraftIcon, aircraftRan
   const reportHTML = `
 <div class="report-page">
 
-  <!-- ① Header -->
+  <!-- ① Algorithm Badges — clearly labels both AI algorithms used -->
+  <div class="algo-pills">
+    <span class="algo-pill greedy">🧮 Algorithm 1: Greedy Best-First Selection — Container Scoring</span>
+    <span class="algo-pill astar">🗺 Algorithm 2: A* Search  f(n) = g(n) + h(n) — Route Optimisation</span>
+  </div>
+
+  <!-- ② Report Header -->
   <div class="report-header-card">
     <div class="report-header-left">
       <h3>Cargo Expert Assessment Report</h3>
