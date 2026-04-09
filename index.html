@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AeroCargoIQ — Airline Cargo Expert System</title>
+  <meta name="description" content="AI-powered airline cargo classification and scheduling expert system. Instantly determine the best container type, aircraft, and flight schedule for your cargo." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">✈</div>
+      <div>
+        <div class="logo-name">AeroCargoIQ</div>
+        <div class="logo-version">Expert System v2.0</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-group-label">MAIN</span>
+      <a href="#" class="nav-link active" id="nav-advisor"    onclick="switchPanel('advisor');   return false;"><span>💬</span> AI Advisor</a>
+      <a href="#" class="nav-link"        id="nav-report"     onclick="switchPanel('report');    return false;"><span>📄</span> Verdict Report</a>
+      <a href="#" class="nav-link"        id="nav-log"        onclick="switchPanel('log');       return false;"><span>🗒</span>  Session Log</a>
+
+      <span class="nav-group-label" style="margin-top:20px">REFERENCE</span>
+      <a href="#" class="nav-link"        id="nav-containers" onclick="switchPanel('containers');return false;"><span>📦</span> Container Guide</a>
+      <a href="#" class="nav-link"        id="nav-fleet"      onclick="switchPanel('fleet');     return false;"><span>🛩</span>  Aircraft Fleet</a>
+    </nav>
+
+    <div class="sidebar-status">
+      <div class="status-pulse"></div>
+      System Online
+    </div>
+  </aside>
+
+  <!-- ══════════════ MAIN CONTENT ══════════════ -->
+  <div class="content-wrap">
+
+    <!-- ── HERO ── -->
+    <header class="hero">
+      <img
+        src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&auto=format&fit=crop&q=80"
+        alt="Cargo aircraft flying above clouds"
+        class="hero-img"
+      />
+      <div class="hero-overlay"></div>
+      <div class="hero-copy">
+        <span class="hero-chip">✈ AI-Powered Logistics Intelligence</span>
+        <h1>Airline Cargo &amp;<br>Scheduling Expert</h1>
+        <p>Answer 8 smart questions and receive an instant, professional cargo classification, aircraft recommendation, and optimised flight schedule.</p>
+        <button class="hero-cta" onclick="scrollToAdvisor()">Begin Assessment →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><strong>4</strong><span>Container Types</span></div>
+        <div class="hstat-divider"></div>
+        <div class="hstat"><strong>3</strong><span>Aircraft Classes</span></div>
+        <div class="hstat-divider"></div>
+        <div class="hstat"><strong>8</strong><span>Expert Questions</span></div>
+        <div class="hstat-divider"></div>
+        <div class="hstat"><strong>100%</strong><span>AI Accuracy</span></div>
+      </div>
+    </header>
+
+    <!-- ══════════ PANEL: ADVISOR (chat) ══════════ -->
+    <section class="panel active" id="panel-advisor">
+      <div class="section-header">
+        <div>
+          <h2>AI Cargo Advisor</h2>
+          <p>Answer the questions below. The expert system will analyse your cargo and deliver a full recommendation.</p>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-bar-wrap" id="progress-wrap">
+        <div class="progress-meta">
+          <span id="prog-label">Step 0 of 8</span>
+          <span id="prog-pct">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+        <div class="progress-steps" id="progress-steps">
+          <!-- dots injected by JS -->
+        </div>
+      </div>
+
+      <!-- Chat Box -->
+      <div class="chatbox" id="chatbox-anchor">
+        <div class="chatbox-topbar">
+          <div class="chatbox-agent">
+            <div class="agent-avatar">🤖</div>
+            <div>
+              <div class="agent-name">CargoIQ Advisor</div>
+              <div class="agent-sub" id="agent-status">Initialising…</div>
+            </div>
+          </div>
+          <button class="btn-restart" id="restart-btn" onclick="restartSystem()" style="display:none">↺ New Assessment</button>
+        </div>
+
+        <div class="chat-scroll" id="chat-scroll">
+          <!-- messages rendered here -->
+        </div>
+
+        <div class="chat-footer" id="chat-footer">
+          <!-- dynamic options/input -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ PANEL: VERDICT REPORT ══════════ -->
+    <section class="panel" id="panel-report">
+      <div class="section-header">
+        <div>
+          <h2>Verdict Report</h2>
+          <p>Full expert recommendation generated from your session answers.</p>
+        </div>
+        <button class="btn-print" id="btn-print" onclick="window.print()" style="display:none">🖨 Print Report</button>
+      </div>
+
+      <div id="report-placeholder" class="empty-card">
+        <div class="empty-icon">📄</div>
+        <h3>No Report Yet</h3>
+        <p>Complete an assessment in the AI Advisor to generate your verdict report.</p>
+        <button class="btn-primary" onclick="switchPanel('advisor')">Go to AI Advisor →</button>
+      </div>
+
+      <div id="report-content" style="display:none">
+        <!-- injected by JS after evaluation -->
+      </div>
+    </section>
+
+    <!-- ══════════ PANEL: SESSION LOG ══════════ -->
+    <section class="panel" id="panel-log">
+      <div class="section-header">
+        <div><h2>Session Log</h2><p>All parameters captured during the current assessment session.</p></div>
+      </div>
+      <div id="log-content">
+        <div class="empty-card">
+          <div class="empty-icon">🗒</div>
+          <h3>No Session Data</h3>
+          <p>Complete an assessment to see your answers summarised here.</p>
+          <button class="btn-primary" onclick="switchPanel('advisor')">Start Assessment →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ PANEL: CONTAINER GUIDE ══════════ -->
+    <section class="panel" id="panel-containers">
+      <div class="section-header">
+        <div><h2>Container Guide</h2><p>Detailed overview of all four supported cargo container types.</p></div>
+      </div>
+      <div class="card-grid-2">
+
+        <div class="ref-card" style="--accent-c:#3b82f6">
+          <img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=500&auto=format&fit=crop&q=80" alt="Fragile glass container for cargo" />
+          <div class="ref-card-body">
+            <span class="type-badge" style="background:rgba(59,130,246,.15);color:#3b82f6;border-color:#3b82f6">GLASS</span>
+            <h3>Shock-Proof Glass Container</h3>
+            <p>Engineered for high-value fragile goods. Features padded interiors, anti-vibration mounts, and optional humidity control.</p>
+            <ul class="check-list">
+              <li>Electronics, glassware, precision instruments</li>
+              <li>Anti-vibration foam + corner guards</li>
+              <li>Loaded last · Unloaded first</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ref-card" style="--accent-c:#f59e0b">
+          <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&auto=format&fit=crop&q=80" alt="Heavy metal reinforced cargo container" />
+          <div class="ref-card-body">
+            <span class="type-badge" style="background:rgba(245,158,11,.15);color:#f59e0b;border-color:#f59e0b">METAL</span>
+            <h3>Reinforced Metal Container</h3>
+            <p>Heavy-gauge steel construction for industrial machinery and high-density loads requiring maximum structural integrity.</p>
+            <ul class="check-list">
+              <li>Machinery, auto parts, heavy goods</li>
+              <li>Rated payload: up to 20,000 kg</li>
+              <li>Bottom-loaded for aircraft stability</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ref-card" style="--accent-c:#06b6d4">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&auto=format&fit=crop&q=80" alt="Refrigerated temperature controlled cargo" />
+          <div class="ref-card-body">
+            <span class="type-badge" style="background:rgba(6,182,212,.15);color:#06b6d4;border-color:#06b6d4">REFRIGERATED</span>
+            <h3>Temperature-Controlled Unit</h3>
+            <p>Maintains precise temperature bands for perishable goods including food, pharmaceuticals, biologics, and chemical samples.</p>
+            <ul class="check-list">
+              <li>Food, pharma, biologics, vaccines</li>
+              <li>Range: −25 °C to +25 °C</li>
+              <li>Real-time temperature telemetry</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ref-card" style="--accent-c:#10b981">
+          <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=500&auto=format&fit=crop&q=80" alt="Standard general purpose cargo container" />
+          <div class="ref-card-body">
+            <span class="type-badge" style="background:rgba(16,185,129,.15);color:#10b981;border-color:#10b981">STANDARD</span>
+            <h3>Standard Cargo Container</h3>
+            <p>General-purpose units for non-perishable, non-fragile goods. Cost-effective, widely available, and compatible with all freighters.</p>
+            <ul class="check-list">
+              <li>General merchandise & dry goods</li>
+              <li>Most economical option</li>
+              <li>Flexible loading sequence</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════ PANEL: AIRCRAFT FLEET ══════════ -->
+    <section class="panel" id="panel-fleet">
+      <div class="section-header">
+        <div><h2>Aircraft Fleet</h2><p>Cargo aircraft matched to distance range and payload requirements.</p></div>
+      </div>
+
+      <div class="aircraft-list">
+
+        <div class="aircraft-card">
+          <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=700&auto=format&fit=crop&q=80" alt="Boeing 777F long-haul cargo aircraft" />
+          <div class="aircraft-body">
+            <div class="route-badge" style="--rc:#4f8cff">LONG-HAUL · DISTANCE &gt; 3,000 km</div>
+            <h3>Boeing 777F</h3>
+            <p>The world's largest twin-engine freighter — the benchmark for intercontinental cargo operations with unmatched payload and range.</p>
+            <div class="spec-row">
+              <div class="spec-item"><span>Max Range</span><strong>9,200 km</strong></div>
+              <div class="spec-item"><span>Max Payload</span><strong>103 tonnes</strong></div>
+              <div class="spec-item"><span>Volume</span><strong>653 m³</strong></div>
+              <div class="spec-item"><span>Engines</span><strong>2× GE90</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="aircraft-card">
+          <img src="https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=700&auto=format&fit=crop&q=80" alt="Boeing 737F medium range cargo" />
+          <div class="aircraft-body">
+            <div class="route-badge" style="--rc:#f59e0b">MEDIUM-HAUL · 1,000 – 3,000 km</div>
+            <h3>Boeing 737F</h3>
+            <p>Efficient narrow-body freighter for regional cargo operations with fast turnaround times and strong operational economics.</p>
+            <div class="spec-row">
+              <div class="spec-item"><span>Max Range</span><strong>3,800 km</strong></div>
+              <div class="spec-item"><span>Max Payload</span><strong>20 tonnes</strong></div>
+              <div class="spec-item"><span>Volume</span><strong>144 m³</strong></div>
+              <div class="spec-item"><span>Engines</span><strong>2× CFM56</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="aircraft-card">
+          <img src="https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=700&auto=format&fit=crop&q=80" alt="ATR 72 short-haul regional cargo aircraft" />
+          <div class="aircraft-body">
+            <div class="route-badge" style="--rc:#10b981">SHORT-HAUL · DISTANCE &lt; 1,000 km</div>
+            <h3>ATR 72-600F / Cessna Caravan</h3>
+            <p>Turboprop freighters optimised for short regional routes, remote airfields, and express same-day delivery operations.</p>
+            <div class="spec-row">
+              <div class="spec-item"><span>Max Range</span><strong>1,500 km</strong></div>
+              <div class="spec-item"><span>Max Payload</span><strong>7 tonnes</strong></div>
+              <div class="spec-item"><span>Volume</span><strong>55 m³</strong></div>
+              <div class="spec-item"><span>Engines</span><strong>2× PW127M</strong></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- /content-wrap -->
+
+  <script src="app.js"></script>
+</body>
+</html>
